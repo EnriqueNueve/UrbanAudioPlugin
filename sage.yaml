@@ -1,0 +1,14 @@
+name: "urban-sound-classifier"
+description: "Classifies ten different urban sounds (air conditioner, car horn, children playing,
+                dog barking, drilling, engine, gun shot,
+               jackhammer, siren,street music)."
+version: "0.1.0"
+source:
+  architectures:
+    - "linux/amd64"
+    - "linux/arm64"
+    - "linux/arm/v7"
+  url: "https://github.com/waggle-sensor/plugin-numpy-example"
+
+  testing:
+    command: [test.py]
