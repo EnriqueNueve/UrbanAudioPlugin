@@ -7,6 +7,7 @@ Example: python3 main.py --SAMPLERATE_HZ 22050 --DURATION_S 10 --TOP_K 3
 """
 
 from waggle.data import AudioFolder, Microphone
+
 def main():
     # can now read test audio data from a folder for testing
     dataset = AudioFolder("audio_test_data")
@@ -14,9 +15,10 @@ def main():
         print(sample.data)
         print(sample.samplerate)
     # can now record audio data from a microphone
-    microphone = Microphone()
-    sample = microphone.record(duration=2)
+    microphone = Microphone(samplerate=22050)
+    sample = microphone.record(duration=5)
     print(sample.data)
+
 
 """
 
@@ -129,9 +131,6 @@ def main():
 
     logging.info("starting plugin. sample rate of audio is {} with duration of {} seconds".format(args.SAMPLERATE_HZ,args.DURATION_S))
 
-    # Init plugin
-    # plugin.init()
-
     # Load model
     model, input_details, output_details = getAudioModel()
 
@@ -143,6 +142,14 @@ def main():
 
     for i,k in enumerate(yh_k):
         print("Rank: {} | Class: {} | Score: {}".format(i+1,k, np.round(yh_conf[i],4)))
+
+
+    # Init plugin
+    # plugin.init()
+
+    #microphone = Microphone(samplerate=args.SAMPLERATE_HZ)
+    #sample = microphone.record(duration=args.DURATION_S)
+    #yh_k, yh_conf = predictModel(model, input_details, output_details,sample,args.TOP_K)
 
     # Publish to plugin
     #plugin.publish(, results["mean"][0])

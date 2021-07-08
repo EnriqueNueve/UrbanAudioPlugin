@@ -25,6 +25,11 @@ CLASS_LABELS = ['air conditioner','car horn','children playing',\
 ######################
 
 class MyTestCase(unittest.TestCase):
+    def test_audio_func(self):
+        data = AudioFolder('test_path')
+        for sample in data:
+            sample.data
+
     def test_something(self):
         self.assertTrue(1 == 1)
 
