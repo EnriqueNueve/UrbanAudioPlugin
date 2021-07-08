@@ -131,6 +131,8 @@ def main():
 
     logging.info("starting plugin. sample rate of audio is {} with duration of {} seconds".format(args.SAMPLERATE_HZ,args.DURATION_S))
 
+    #####################
+
     # Load model
     model, input_details, output_details = getAudioModel()
 
@@ -143,16 +145,21 @@ def main():
     for i,k in enumerate(yh_k):
         print("Rank: {} | Class: {} | Score: {}".format(i+1,k, np.round(yh_conf[i],4)))
 
+    #####################
 
     # Init plugin
-    # plugin.init()
+    plugin.init()
+    microphone = Microphone(samplerate=args.SAMPLERATE_HZ)
 
-    #microphone = Microphone(samplerate=args.SAMPLERATE_HZ)
-    #sample = microphone.record(duration=args.DURATION_S)
-    #yh_k, yh_conf = predictModel(model, input_details, output_details,sample,args.TOP_K)
+    while True:
+        sample = microphone.record(duration=args.DURATION_S)
+        yh_k, yh_conf = predictModel(model, input_details, output_details,sample,args.TOP_K)
 
-    # Publish to plugin
-    #plugin.publish(, results["mean"][0])
+        # Publish to plugin
+        for i in range(args.TOP_K):
+            plugin.publish("rank."+str(i+1)+".class", yh_k[i])
+            plugin.publish("rank."+str(i+1)+".prob", yh_conf[i])
+
 
 if __name__ == '__main__':
     main()
